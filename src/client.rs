@@ -44,3 +44,33 @@ pub trait HttpClient: Clone {
     /// Performs a GET request with the given headers.
     fn get(&self, url: &str, headers: &HeaderMap) -> Result<Response>;
 }
+
+/// Ureq-based HTTP client (available with the `ureq` feature).
+#[cfg(feature = "ureq")]
+#[derive(Clone)]
+pub struct UreqClient;
+
+#[cfg(feature = "ureq")]
+impl HttpClient for UreqClient {
+    fn get(&self, url: &str, headers: &HeaderMap) -> Result<Response> {
+        use crate::error::Error;
+
+        let mut req = ureq::get(url).header("User-Agent", "releasekit");
+        for (k, v) in headers.iter() {
+            req = req.header(k, v);
+        }
+        let resp = req.call().map_err(|e| Error::Network(e.to_string()))?;
+        let status = resp.status().as_u16();
+        if status >= 400 {
+            return Err(Error::Http {
+                status,
+                url: url.to_string(),
+            });
+        }
+        let body = resp
+            .into_body()
+            .read_to_string()
+            .map_err(|e| Error::Network(e.to_string()))?;
+        Ok(Response { status, body })
+    }
+}

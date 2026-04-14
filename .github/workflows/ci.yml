@@ -19,9 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: "1.85"
+      - uses: dtolnay/rust-toolchain@nightly
       - run: cargo check --all-features --locked
 
   fmt:
@@ -29,9 +27,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: "1.85"
           components: rustfmt
       - run: cargo fmt --all -- --check
 
@@ -40,9 +37,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@nightly
         with:
-          toolchain: "1.85"
           components: clippy
       - run: cargo clippy --all-targets --all-features -- -D warnings
 
@@ -51,7 +47,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: "1.85"
+      - uses: dtolnay/rust-toolchain@nightly
       - run: cargo test --all-features --locked

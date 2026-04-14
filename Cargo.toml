@@ -2,7 +2,7 @@
 name = "releasekit"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.93.1"
 license = "MIT"
 description = "Client-agnostic library for fetching releases from git forges"
 keywords = ["github", "release", "forge"]

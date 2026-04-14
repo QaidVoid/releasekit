@@ -13,6 +13,7 @@ use serde::Deserialize;
 pub struct GitHub<C: HttpClient> {
     client: C,
     token: Option<String>,
+    base_url: String,
 }
 
 impl<C: HttpClient> GitHub<C> {
@@ -21,7 +22,17 @@ impl<C: HttpClient> GitHub<C> {
         Self {
             client,
             token: None,
+            base_url: "https://api.github.com".to_string(),
         }
+    }
+
+    /// Sets a custom base URL for the GitHub API.
+    ///
+    /// Useful for GitHub Enterprise or API proxies. Trailing slashes are
+    /// stripped automatically.
+    pub fn with_base_url(mut self, url: impl Into<String>) -> Self {
+        self.base_url = url.into().trim_end_matches('/').to_string();
+        self
     }
 
     /// Sets a GitHub personal access token for authentication.
@@ -103,9 +114,9 @@ impl<C: HttpClient> Forge for GitHub<C> {
         let url = match tag {
             Some(t) => {
                 let enc = urlencoding::encode(t);
-                format!("https://api.github.com/repos/{project}/releases/tags/{enc}")
+                format!("{}/repos/{project}/releases/tags/{enc}", self.base_url)
             }
-            None => format!("https://api.github.com/repos/{project}/releases?per_page=100"),
+            None => format!("{}/repos/{project}/releases?per_page=100", self.base_url),
         };
 
         let resp = self.client.get(&url, &self.auth_headers())?;

@@ -29,4 +29,5 @@ pub use model::{Asset, Release};
 pub use platform::Forge;
 pub use platform::GitHub;
 pub use platform::GitLab;
+pub use platform::Gitea;
 pub use url::PlatformUrl;

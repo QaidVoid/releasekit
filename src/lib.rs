@@ -28,4 +28,5 @@ pub use filter::Filter;
 pub use model::{Asset, Release};
 pub use platform::Forge;
 pub use platform::GitHub;
+pub use platform::GitLab;
 pub use url::PlatformUrl;

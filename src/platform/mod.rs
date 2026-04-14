@@ -1,8 +1,10 @@
 //! Forge trait for fetching releases from git hosting platforms.
 
 pub mod github;
+pub mod gitlab;
 
 pub use github::GitHub;
+pub use gitlab::GitLab;
 
 use crate::error::Result;
 use crate::model::Release;
